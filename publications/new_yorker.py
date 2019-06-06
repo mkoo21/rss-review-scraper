@@ -1,11 +1,22 @@
-from . import PUBLISHED_TODAY, STRINGIFY
+from . import PUBLISHED_TODAY, STRINGIFY, YESTERDAY
+from bs4 import BeautifulSoup
+from datetime import datetime
 import feedparser
 import re
+import requests
+
+
+def matches_category(entry, category):
+    try:
+        return bool(re.search(category, entry.category))
+    except AttributeError:
+        return False
 
 
 def filter_by_category(category_name, entries):
+    entries = list(entries)
     matches = list(filter(
-        lambda x: bool(re.search(category_name, x.category)),
+        lambda x: matches_category(x, category_name),
         entries
     ))
     return "<h2>New Yorker / {} - {} results</h2>"\
@@ -39,5 +50,27 @@ def get_books():
     return filter_by_category('Books', pub_today)
 
 
+def stringify_podcast(x):
+    return "<p><b>{}</b></p><p> - New Yorker</p>\
+            <p>https://www.newyorker.com{}</p>\
+            <p>{}</p>".format(x.select_one('h4').text,
+                              x.select_one('a')['href'],
+                              x.select_one('h5').text)
+
+
+def get_podcasts():
+    req = requests.get('https://www.newyorker.com/culture/podcast-dept')
+    doc = BeautifulSoup(req.content, 'html.parser')
+    list_items = doc.select('li[class^=River__riverItem]')
+    pub_today = list(filter(lambda x:
+                            datetime.strptime(x.select_one('h6').text,
+                                              '%B %d, %Y').date() >=
+                            YESTERDAY.date(), list_items))
+
+    return "<h2>New Yorker / Podcasts - {} results</h2>"\
+           .format(len(pub_today)) + \
+           "".join(list(map(lambda x: stringify_podcast(x), pub_today)))
+
+
 def NEW_YORKER():
-    return get_magazines() + get_culture() + get_books()
+    return get_magazines() + get_culture() + get_books() + get_podcasts()

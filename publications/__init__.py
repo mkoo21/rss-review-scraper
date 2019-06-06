@@ -13,8 +13,12 @@ def FROM_FEED_PUBLISHED_TODAY(feed):
 
 
 def PUBLISHED_TODAY(entry):
-    return datetime.strptime(entry['published'], DATE_FORMAT) \
+    try:
+        return datetime.strptime(entry['published'], DATE_FORMAT) \
            > YESTERDAY
+    except ValueError:
+        print('RSS entry did not match date format: {}'.format(entry))
+        return False
 
 
 def STRINGIFY(entry, pub):
