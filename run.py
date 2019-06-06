@@ -1,4 +1,3 @@
-import ipdb
 import json
 from mail import send_mail
 from publications.nyt import NYT
@@ -15,8 +14,7 @@ def scrape_publication(f):
     try:
         return f()
     except Exception as e:
-        ipdb.set_trace()
-        return "<p>Encountered an issue with publication {}!</p><p>{}</p>".format(f.__name__, e.message)
+        return "<p>Encountered an issue with publication {}!</p><p>{}</p>".format(f.__name__, str(e))
 
 
 def main(event=None, context=None):
@@ -29,3 +27,6 @@ def main(event=None, context=None):
         'statusCode': 200,
         'body': json.dumps('Execution complete.')
     }
+
+
+main()
