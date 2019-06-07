@@ -22,8 +22,12 @@ def PUBLISHED_TODAY(entry):
 
 
 def STRINGIFY(entry, pub):
-    return "<p><b>{}</b> - {}</p><p>{}</p><p>{}</p>".format(
-            entry['title'],
-            pub,
-            entry['link'],
-            entry['description'])
+    try:
+        return "<p><b>{}</b> - {}</p><p>{}</p><p>{}</p>".format(
+               entry['title'],
+               pub,
+               entry['link'],
+               entry['description'])
+    except Exception:
+        print('Malformed rss entry: {}', entry)
+        return ''
