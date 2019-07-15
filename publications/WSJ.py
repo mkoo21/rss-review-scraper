@@ -35,5 +35,7 @@ def WSJ():
 
     articles = list(filter(PUBLISHED_TODAY, doc.find_all('article')))
     # print(list(map(STRINGIFY, filter(PUBLISHED_TODAY, articles))))
+    if len(articles) == 0:
+        return ""
     return "<h2>WSJ Joe Morgenstern - {} results</h2>".format(len(articles)) +\
            "".join(list(map(STRINGIFY, articles)))

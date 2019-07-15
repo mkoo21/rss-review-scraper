@@ -32,6 +32,8 @@ def get_vanilla_rss():
     for feed in URLS:
         d = feedparser.parse(URLS[feed])
         entries = list(filter(PUBLISHED_TODAY, d.entries))
+        if len(entries) == 0:
+            return ""
         msg += "<h2>{} - {} results</h2>".format(feed, len(entries)) + \
                "".join(list(map(lambda x: STRINGIFY(x, 'NYT'), entries)))
     return msg
@@ -43,6 +45,8 @@ def get_movies():
         d = feedparser.parse(MOVIE_URL[feed])
         pub_today = list(filter(PUBLISHED_TODAY, d.entries))
         is_review = list(filter(MOVIE_REVIEW, pub_today))
+        if len(is_review) == 0:
+            return ""
         msg += "<h2>{} - {} results</h2>".format(feed, len(is_review)) + \
                "".join(list(map(lambda x: STRINGIFY(x, 'NYT'), is_review)))
     return msg
@@ -54,6 +58,8 @@ def get_books():
         d = feedparser.parse(BOOKS_URL[feed])
         pub_today = list(filter(PUBLISHED_TODAY, d.entries))
         is_review = list(filter(BOOK_REVIEW, pub_today))
+        if len(is_review) == 0:
+            return ""
         msg += "<h2>{} - {} results</h2>".format(feed, len(is_review)) + \
                "".join(list(map(lambda x: STRINGIFY(x, 'NYT'), is_review)))
     return msg

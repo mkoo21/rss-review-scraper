@@ -23,5 +23,7 @@ def PUBLISHED_TODAY(article):
 def VULTURE():
     articles = list(filter(lambda x: x['class'] == ['article'], doc.find('section').ol.find_all('li')))
     pub_today = list(filter(PUBLISHED_TODAY, articles))
+    if len(pub_today) == 0:
+        return ""
     return "<h2>Vulture - {} results</h2>".format(len(pub_today)) + \
            "".join(list(map(STRINGIFY, pub_today)))

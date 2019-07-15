@@ -28,5 +28,7 @@ def PUBLISHED_TODAY(article):
 def KIRKUS():
     books = doc.find_all("div", {"class": "row book-item-ctr"})
     pub_today = list(filter(PUBLISHED_TODAY, books))
+    if len(pub_today) == 0:
+        return ""
     return "<h2>Kirkus - {} results</h2>".format(len(pub_today)) + \
            "".join(list(map(STRINGIFY, pub_today)))

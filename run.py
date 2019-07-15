@@ -19,14 +19,14 @@ def scrape_publication(f):
 
 def main(event=None, context=None):
     email_string = ""
-    for pub in [NYT, NEW_YORKER, TIME, VARIETY, WSJ, THR, VULTURE, KIRKUS]:
-        email_string += scrape_publication(pub)
-    send_mail(email_string)
+    try:
+        for pub in [NYT, NEW_YORKER, TIME, VARIETY, WSJ, THR, VULTURE, KIRKUS]:
+            email_string += scrape_publication(pub)
+        send_mail(email_string)
+    except Exception as e:
+        print(e)
 
     return {
         'statusCode': 200,
         'body': json.dumps('Execution complete.')
     }
-
-
-main()

@@ -24,6 +24,8 @@ def get_tv_reviews():
     req = requests.get('https://www.hollywoodreporter.com/topic/tv-reviews')
     articles = BeautifulSoup(req.content, 'html.parser').find_all('article')
     pub_today = list(filter(PUBLISHED_TODAY, articles))
+    if len(pub_today) == 0:
+        return ""
     return "<h2>THR TV Reviews - {} results</h2>".format(len(pub_today)) + \
            "".join(list(map(STRINGIFY, pub_today)))
 
@@ -32,6 +34,8 @@ def get_movie_reviews():
     req = requests.get('https://www.hollywoodreporter.com/topic/movie-reviews')
     articles = BeautifulSoup(req.content, 'html.parser').find_all('article')
     pub_today = list(filter(PUBLISHED_TODAY, articles))
+    if len(pub_today) == 0:
+        return ""
     return "<h2>THR Movie Reviews - {} results</h2>".format(len(pub_today)) + \
            "".join(list(map(STRINGIFY, pub_today)))
 

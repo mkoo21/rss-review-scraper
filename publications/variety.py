@@ -21,6 +21,8 @@ def get_articles(t):
     articles = document.find_all('article')
     pub_today = list(filter(lambda x: bool(get_pubdate(x)) and get_pubdate(x) >
                             YESTERDAY, articles))
+    if len(pub_today) == 0:
+        return ""
     return "<h2>Variety / {} - {} results</h2>".format(t, len(pub_today)) + \
            "".join(map(lambda x: STRINGIFY(x), pub_today))
 

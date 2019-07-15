@@ -19,6 +19,8 @@ def filter_by_category(category_name, entries):
         lambda x: matches_category(x, category_name),
         entries
     ))
+    if len(matches) == 0:
+        return ""
     return "<h2>New Yorker / {} - {} results</h2>"\
            .format(category_name, len(matches)) + \
            "".join(list(map(lambda x: STRINGIFY(x, 'New Yorker'), matches)))
@@ -66,7 +68,9 @@ def get_podcasts():
                             datetime.strptime(x.select_one('h6').text,
                                               '%B %d, %Y').date() >=
                             YESTERDAY.date(), list_items))
-
+    
+    if len(pub_today) == 0:
+        return ""
     return "<h2>New Yorker / Podcasts - {} results</h2>"\
            .format(len(pub_today)) + \
            "".join(list(map(lambda x: stringify_podcast(x), pub_today)))

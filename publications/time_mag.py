@@ -9,6 +9,8 @@ def filter_by_tag(tag, entries):
             ))),
         entries
     ))
+    if len(matches) == 0:
+        return ""
     return "<h2>TIME {} - {} results</h2>".format(tag, len(matches)) + \
            "".join(list(map(lambda x: STRINGIFY(x, 'TIME'), matches)))
 
